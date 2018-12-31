@@ -8,40 +8,15 @@ object DBClient {
 
   val database: MongoDatabase = mongoClient.getDatabase("mydb")
 
-  val collection: MongoCollection[Document] = database.getCollection("test");
+  val collection: MongoCollection[Document] = database.getCollection("test")
 
-  val document: Document = Document("name" -> "Jerry")
-
-  val insertObservable: Observable[Completed] = collection.insertOne(document)
-
-  collection.find().collect().subscribe((results: Seq[Document]) => println(s"Found: #${results.size}"))
-
-
-
-def write(doc:String): Unit = {
-  collection.insertOne(document)
-}
-
-  def read: Unit = {
-    collection.find()
-  println(read)
+  def createInTestCollection(newDoc:Document) = {
+    collection.insertOne(newDoc)
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  def read(name:Document) = {
+    collection.find(name)
+  }
 }
 
 
