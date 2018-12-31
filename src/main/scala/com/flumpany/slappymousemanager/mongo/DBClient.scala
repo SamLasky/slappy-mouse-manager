@@ -18,7 +18,3 @@ object DBClient {
     collection.find(name)
   }
 }
-
-
-
-
