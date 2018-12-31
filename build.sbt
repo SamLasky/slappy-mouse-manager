@@ -1,6 +1,7 @@
 val finchVersion = "0.26.0"
 val circeVersion = "0.10.1"
 val scalatestVersion = "3.0.5"
+val mongoDriverVersion = "2.4.2"
 
 lazy val root = (project in file("."))
   .settings(
@@ -12,6 +13,7 @@ lazy val root = (project in file("."))
       "com.github.finagle" %% "finchx-core"  % finchVersion,
       "com.github.finagle" %% "finchx-circe"  % finchVersion,
       "io.circe" %% "circe-generic" % circeVersion,
-      "org.scalatest"      %% "scalatest"    % scalatestVersion % "test"
+      "org.scalatest" %% "scalatest" % scalatestVersion % "test",
+      "org.mongodb.scala" %% "mongo-scala-driver" % mongoDriverVersion
     )
   )
