@@ -11,8 +11,6 @@ import io.circe.generic.auto._
 
 object Main extends App {
 
-  case class Message(hello: String)
-
   def healthcheck: Endpoint[IO, String] = get(pathEmpty) {
     Ok("OK")
   }

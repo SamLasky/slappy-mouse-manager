@@ -1,24 +1,21 @@
 package com.flumpany.slappymousemanager
 
 import io.finch._
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.{FunSpec, Matchers}
 
-class MainTest extends FunSuite with Matchers {
-  test("healthcheck") {
-    assert(Main.healthcheck(Input.get("/")).awaitValueUnsafe().contains("OK"))
+class MainTest extends FunSpec with Matchers {
+
+  val username = "test1"
+  describe("healthcheck") {
+    it("should return OK when the root endpoint is hit") {
+      Main.healthcheck(Input.get("/")).awaitValueUnsafe().get should not be "NotOK"
+      Main.healthcheck(Input.get("/")).awaitValueUnsafe().get shouldBe "OK"
+    }
   }
 
-  test("helloWorld") {
-    assert(Main.helloWorld(Input.get("/hello")).awaitValueUnsafe().contains(Main.Message("World")))
-  }
-
-  test("hello") {
-    assert(Main.hello(Input.get("/hello/foo")).awaitValueUnsafe().contains(Main.Message("foo")))
-  }
-
-  test("whatever"){
-
-    Main.hello(Input.get("/hello/floo")).awaitValueUnsafe() should not contain Main.Message("floo")
-
+  describe(s"userData/$username"){
+    it(s"should return $username when the endpoint /userData/$username is hit") {
+      Main.userData(Input.get(s"/userData/$username")).awaitValueUnsafe().get shouldBe username
+    }
   }
 }

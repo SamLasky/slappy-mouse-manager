@@ -1,20 +1,29 @@
 package com.flumpany.slappymousemanager.mongo
 
+import org.bson.conversions.Bson
 import org.mongodb.scala._
+import org.mongodb.scala.bson.codecs.Macros._
+import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
+import org.bson.codecs.configuration.CodecRegistries.{fromRegistries, fromProviders}
 
-object DBClient {
+import scala.concurrent.Future
 
-  val mongoClient: MongoClient = MongoClient("mongodb://localhost")
+class DBClient(url: String, databaseName: String, collectionName: String) {
 
-  val database: MongoDatabase = mongoClient.getDatabase("mydb")
+  val mongoClient: MongoClient = MongoClient(url)
+  val codecRegistry = fromRegistries(fromProviders(classOf[UserData]), DEFAULT_CODEC_REGISTRY )
 
-  val collection: MongoCollection[Document] = database.getCollection("test")
+  val database: MongoDatabase = mongoClient.getDatabase(databaseName).withCodecRegistry(codecRegistry)
 
-  def createInTestCollection(newDoc:Document) = {
-    collection.insertOne(newDoc)
+  val collection: MongoCollection[UserData] = database.getCollection(collectionName)
+
+  def create(newDoc:UserData): Future[Completed] = {
+    collection.insertOne(newDoc).toFuture()
   }
 
-  def read(name:Document) = {
-    collection.find(name)
+  def read(condition: Bson): Future[Seq[UserData]] = {
+    collection.find[UserData](condition).toFuture()
   }
 }
+
+case class UserData(name: String)
