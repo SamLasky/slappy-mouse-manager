@@ -1,6 +1,7 @@
 package com.flumpany.slappymousemanager
 
 import cats.effect.IO
+import com.flumpany.slappymousemanager.mongo.UserData
 import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.util.Await
@@ -21,12 +22,16 @@ object Main extends App {
     Ok(username)
   }
 
+  def userDataPost: Endpoint[IO, String] = post("userData" :: jsonBody[UserData]){ userData: UserData =>
+    Ok(userData.name)
+  }
+
 
 
 
   def service: Service[Request, Response] = Bootstrap
     .serve[Text.Plain](healthcheck)
-    .serve[Application.Json](userData)
+    .serve[Application.Json](userData :+: userDataPost)
     .toService
 
   Await.ready(Http.server.serve(":8081", service))
