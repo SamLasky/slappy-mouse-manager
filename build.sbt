@@ -17,3 +17,4 @@ lazy val root = (project in file("."))
       "org.mongodb.scala" %% "mongo-scala-driver" % mongoDriverVersion
     )
   )
+SQUINCHYBOOBOO!
